@@ -270,8 +270,15 @@
       .nav-item .icon {
         font-size: 1.2rem;
         width: 24px;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
+      }
+      .nav-item .icon svg {
+        width: 1.15em;
+        height: 1.15em;
+        display: block;
       }
       .sidebar-footer {
         padding: var(--space-6) var(--space-4) 0;
@@ -655,12 +662,27 @@
         aria-label="地区列表"
       >
         <div class="nav-item active" data-hash="home">
-          <span class="icon">🏠</span>
+          <span class="icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+              <path
+                d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </span>
           <span>主页</span>
         </div>
       </nav>
       <div class="sidebar-footer">
-        <p>© 2026 by chixxxna</p>
+        <p>© 2026 by Ayash1mo</p>
       </div>
     </aside>
     <main class="main-container" id="main-content">
@@ -827,69 +849,151 @@
     </main>
     <script>
       // ====================== 全局配置项 ======================
+      // ====================== 地区图标（内联 SVG 线稿） ======================
+      // 每个地区取一处地标作为图标，统一 24x24 线稿，描边跟随文字颜色
+      const ICON_SVG_ATTRS =
+        'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+
+      const makeIcon = (body) =>
+        `<svg ${ICON_SVG_ATTRS}>${body}</svg>`;
+
+      const nationIcons = {
+        // 主页 · 小屋
+        home: makeIcon(`
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+          <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        `),
+        // 蒙德 · 风车
+        mondstadt: makeIcon(`
+          <circle cx="12" cy="7.6" r="1.5" />
+          <path d="M12 7.6 8.1 3.7" />
+          <path d="M12 7.6 15.9 3.7" />
+          <path d="M12 7.6 8.1 11.5" />
+          <path d="M12 7.6 15.9 11.5" />
+          <path d="M12 9.1v11.4" />
+          <path d="M8.8 20.5h6.4" />
+        `),
+        // 璃月 · 飞檐牌坊
+        liyue: makeIcon(`
+          <path d="M12 2.8v1.7" />
+          <path d="M6.6 9 12 4.5 17.4 9" />
+          <path d="M6.6 9c-1.2.1-2-.1-2.6-.6" />
+          <path d="M17.4 9c1.2.1 2-.1 2.6-.6" />
+          <path d="M7.8 9.3v2.7" />
+          <path d="M16.2 9.3v2.7" />
+          <path d="M4.5 12h15" />
+          <path d="M8.6 12.3v8.2" />
+          <path d="M15.4 12.3v8.2" />
+          <path d="M6.2 20.5h11.6" />
+        `),
+        // 稻妻 · 鸟居
+        inazuma: makeIcon(`
+          <path d="M2.6 5.6c2.9.8 5.9 1.2 9.4 1.2s6.5-.4 9.4-1.2" />
+          <path d="M5.2 9.2h13.6" />
+          <path d="M7.9 6.5 7 20.5" />
+          <path d="M16.1 6.5 17 20.5" />
+        `),
+        // 须弥 · 圣树
+        sumeru: makeIcon(`
+          <path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z" />
+          <path d="M12 19v3" />
+        `),
+        // 枫丹 · 喷泉
+        fontaine: makeIcon(`
+          <circle cx="12" cy="2.8" r="1.1" />
+          <path d="M12 3.9v6.6" />
+          <path d="M3.6 10.5h16.8" />
+          <path d="M3.6 10.5c0 4.2 3.8 7 8.4 7s8.4-2.8 8.4-7" />
+          <path d="M12 17.5v3" />
+          <path d="M8.6 20.5h6.8" />
+        `),
+        // 纳塔 · 火山
+        natlan: makeIcon(`
+          <path d="M2.8 20.5h18.4" />
+          <path d="M6.6 20.5 9.8 9.2h4.4l3.2 11.3" />
+          <path d="M9.6 7.2a3.2 3.2 0 0 1 4.8 0" />
+          <path d="M10.8 4.2a1.8 1.8 0 0 1 2.4 0" />
+        `),
+        // 至冬 · 穹顶宫殿
+        snezhnaya: makeIcon(`
+          <path d="M12 2.2v1.4" />
+          <path d="M12 3.6c1.9 1.5 2.9 2.9 2.9 4.1 0 1.5-1.3 2.6-2.9 2.6s-2.9-1.1-2.9-2.6c0-1.2 1-2.6 2.9-4.1Z" />
+          <path d="M7.2 10.3h9.6" />
+          <path d="M8.4 10.3v10.2" />
+          <path d="M15.6 10.3v10.2" />
+          <path d="M5 20.5h14" />
+          <path d="M10.6 20.5v-3.2a1.4 1.4 0 0 1 2.8 0v3.2" />
+        `),
+        // 挪德卡莱 · 月牙与星
+        nodkrai: makeIcon(`
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          <path d="M19.4 2.2 q .5 1.5 2 2 q -1.5 .5 -2 2 q -.5 -1.5 -2 -2 q 1.5 -.5 2 -2 Z" />
+        `),
+        // 其他 · 星海
+        beyondtheworld: makeIcon(`
+          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+          <path d="M20 3v4" />
+          <path d="M22 5h-4" />
+          <path d="M4 17v2" />
+          <path d="M5 18H3" />
+        `),
+      };
+
+      // ====================== 地区列表 ======================
       const nationList = [
         {
           name: "蒙德",
           hash: "mondstadt",
           bg: "#42B3BD",
           primary: "#2A939C",
-          icon: "🌬️",
         },
         {
           name: "璃月",
           hash: "liyue",
           bg: "#E6C07A",
           primary: "#B88F46",
-          icon: "💰",
         },
         {
           name: "稻妻",
           hash: "inazuma",
           bg: "#A76BC7",
           primary: "#8A4BA0",
-          icon: "⚡",
         },
         {
           name: "须弥",
           hash: "sumeru",
           bg: "#86B84F",
           primary: "#6A993E",
-          icon: "🌿",
         },
         {
           name: "枫丹",
           hash: "fontaine",
           bg: "#5FA8D3",
           primary: "#3D88B8",
-          icon: "💧",
         },
         {
           name: "纳塔",
           hash: "natlan",
           bg: "#E27A4E",
           primary: "#C15A32",
-          icon: "🔥",
         },
         {
           name: "至冬",
           hash: "snezhnaya",
           bg: "#73C6D9",
           primary: "#4A98AF",
-          icon: "❄️",
         },
         {
           name: "挪德卡莱",
           hash: "nodkrai",
           bg: "#243655",
           primary: "#1A2A42",
-          icon: "🌙",
         },
         {
           name: "其他",
           hash: "beyondtheworld",
           bg: "#161625",
           primary: "#7C3AED",
-          icon: "🌌",
         },
       ];
 
@@ -949,7 +1053,7 @@
           nation: "蒙德",
           birthday: "06-09",
           image:
-            "https://upload-bbs.miyoushe.com/upload/2024/11/06/322106977/fcb3c208e290757b5cb295de988dbf29_4285016593983493121.png?x-oss-process=image/resize,s_600,l_16000/auto-orient,0/interlace,1/quality,q_70/format,webp",
+            "https://patchwiki.biligame.com/images/ys/thumb/7/70/q3oapvjdcr344dr90kvvulvp24e98o6.png/1920px-%E4%B8%BD%E8%8E%8E%E6%8A%BD%E5%8D%A1%E7%AB%8B%E7%BB%98.png",
         },
         {
           name: "凯亚",
@@ -1607,7 +1711,7 @@
           image:
             "https://patchwiki.biligame.com/images/ys/thumb/e/e0/srjrwy2mjj6raqil39tftplz86v5uvt.png/1200px-%E8%8C%9C%E7%89%B9%E8%8F%88%E8%8E%89%E6%8A%BD%E5%8D%A1%E7%AB%8B%E7%BB%98.png",
         },
-        // 至冬 2人
+        // 至冬 7人
         {
           name: "达达利亚",
           nation: "至冬",
@@ -1621,6 +1725,41 @@
           birthday: "08-22",
           image:
             "https://patchwiki.biligame.com/images/ys/thumb/9/92/s3aeb46uh2ldeamwbg4zcag8vvjtbmc.png/1200px-%E9%98%BF%E8%95%BE%E5%A5%87%E8%AF%BA%E6%8A%BD%E5%8D%A1%E7%AB%8B%E7%BB%98.png",
+        },
+        {
+          name: "桑多涅",
+          nation: "至冬",
+          birthday: "01-13",
+          image:
+            "https://patchwiki.biligame.com/images/ys/thumb/9/95/21afqdb120t02zyzrb1s5dt0mz43sqj.png/1920px-%E6%A1%91%E5%A4%9A%E6%B6%85%E6%8A%BD%E5%8D%A1%E7%AB%8B%E7%BB%98.png",
+        },
+        {
+          name: "奥黛塔",
+          nation: "至冬",
+          birthday: "02-20",
+          image:
+            "https://patchwiki.biligame.com/images/ys/thumb/6/68/m06hi6a1xn161ykmewxne6y5dtg9ndm.png/1920px-%E5%A5%A5%E9%BB%9B%E5%A1%94%E6%8A%BD%E5%8D%A1%E7%AB%8B%E7%BB%98.png",
+        },
+        {
+          name: "阿罗夏",
+          nation: "至冬",
+          birthday: "02-09",
+          image:
+            "https://patchwiki.biligame.com/images/ys/c/c1/sse18oo2pao9eajbzoml2v8r4notahp.png",
+        },
+        {
+          name: "薇斯纳",
+          nation: "至冬",
+          birthday: "02-04",
+          image:
+            "https://patchwiki.biligame.com/images/ys/1/1c/2e5zygs40dugbzi9bjjvmw3vnayzqef.png",
+        },
+        {
+          name: "沃雅妮莎",
+          nation: "至冬",
+          birthday: "03-29",
+          image:
+            "https://patchwiki.biligame.com/images/ys/5/5d/t96bz0psdgx9aai649uge4tpqj0mj88.png",
         },
         // 挪德卡莱 9人
         {
@@ -1990,7 +2129,7 @@
           navItem.className = "nav-item";
           navItem.setAttribute("data-hash", nation.hash);
           navItem.innerHTML = `
-                    <span class="icon">${nation.icon}</span>
+                    <span class="icon">${nationIcons[nation.hash] || ""}</span>
                     <span>${nation.name}</span>
                 `;
           navList.appendChild(navItem);
